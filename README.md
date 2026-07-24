@@ -48,7 +48,8 @@ Each example follows the same shape: one folder, `npm install && npm start`.
 
 **Not using JavaScript?** The API is just HTTP + a bearer token. See
 [recipes.md](./recipes.md) for copy-paste `curl` commands (streaming, pagination, chains,
-errors, `jq` one-liners) you can translate into any language.
+errors, `jq` one-liners) you can translate into any language, or the
+[OpenAPI spec](./openapi.yaml) to generate a client or import into Postman/Insomnia.
 
 ## Running any example
 

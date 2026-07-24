@@ -1,0 +1,325 @@
+openapi: 3.1.0
+info:
+  title: Veltra Trade History API
+  version: "1.0.0"
+  description: >
+    Give it a wallet address, get that wallet's complete buy/sell trade history — not capped
+    at a few thousand rows — across Solana, every major EVM chain, and Tron, from a single
+    endpoint. Authenticated with a bearer API key. Get a key at https://veltrabot.com.
+  license:
+    name: Veltra Terms of Service
+    url: https://veltrabot.com/terms
+  contact:
+    url: https://veltrabot.com
+
+servers:
+  - url: https://veltrabot.com
+    description: Production
+
+security:
+  - bearerAuth: []
+  - apiKeyHeader: []
+
+paths:
+  /v1/wallets/{address}/history:
+    get:
+      operationId: getWalletHistory
+      summary: Get a wallet's complete trade history
+      description: >
+        Returns every buy and sell for the wallet.
+
+
+        **Default (no `limit`): streaming NDJSON.** One call delivers the whole history as
+        newline-delimited JSON — one `{ "trades": [...] }` object per batch as trades are
+        fetched, then a terminal `{ "complete": true, "tradeCount": ..., "wallet": ...,
+        "firstTrade": ... }` line. A wallet too large to finish within ~55s ends with
+        `"complete": false` and a `cursor`; reconnect with `?cursor=` (no `limit`) to resume.
+
+
+        **With `limit`: discrete JSON pages.** Pass `limit` (and optionally `cursor`) to get
+        ordinary single-JSON pages instead of a stream. Follow `cursor` until it is absent,
+        which happens only when `complete` is `true`. Re-reading trades you already fetched via
+        `cursor` does not bill them again.
+      parameters:
+        - name: address
+          in: path
+          required: true
+          description: The wallet address, validated against the selected chain's address family.
+          schema:
+            type: string
+          example: Bi4rd5FH5bYEN8scZ7wevxNZyNmKHdaBcvewdPFxYdLt
+        - name: chain
+          in: query
+          required: false
+          description: >
+            Chain to query. Defaults to `sol`. Supports Solana, every major EVM chain
+            (e.g. `eth`, `base`, `bsc`), and Tron. On non-Solana chains, `amountSol` carries
+            the native token amount (ETH/BNB/TRX/...) rather than SOL.
+          schema:
+            type: string
+            default: sol
+          example: eth
+        - name: limit
+          in: query
+          required: false
+          description: >
+            If present, returns discrete single-JSON pages (not NDJSON) with at most `limit`
+            trades. Floored to 1; no maximum.
+          schema:
+            type: integer
+            minimum: 1
+          example: 100
+        - name: cursor
+          in: query
+          required: false
+          description: >
+            Opaque pagination/resume cursor from a previous response. Send it back exactly as
+            received; do not parse or modify it.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: >
+            The wallet's trade history. The content type depends on `limit`: NDJSON stream by
+            default, or a single JSON page when `limit` is set.
+          content:
+            application/x-ndjson:
+              schema:
+                description: >
+                  Newline-delimited JSON. Each line is either a batch of trades or the terminal
+                  completion line (see the two schemas below).
+                oneOf:
+                  - $ref: "#/components/schemas/StreamBatchLine"
+                  - $ref: "#/components/schemas/StreamTerminalLine"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HistoryPage"
+        "400":
+          description: Invalid request (e.g. malformed address for the chain).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "402":
+          description: Plan quota exhausted (upgrade or enable overage).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Rate limited.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /v1/billing/estimate:
+    post:
+      operationId: estimateWallets
+      summary: Estimate wallet sizes before fetching
+      description: >
+        Cheaply probe how many trades one or more wallets have — and get a few sample trades —
+        before committing to a full fetch. IP-rate-limited; no API key required.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EstimateRequest"
+      responses:
+        "200":
+          description: Per-address estimates.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EstimateResponse"
+        "400":
+          description: Invalid request body.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Rate limited.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: "`Authorization: Bearer <YOUR_API_KEY>`"
+    apiKeyHeader:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Alternative to the bearer header.
+
+  schemas:
+    Trade:
+      type: object
+      description: A single buy or sell.
+      properties:
+        signature:
+          type: string
+          description: Transaction signature.
+        side:
+          type: string
+          enum: [buy, sell]
+        token:
+          type: string
+          description: Token symbol.
+        tokenMint:
+          type: [string, "null"]
+          description: Token mint address — a stable per-token key, since symbols can collide.
+        amountSol:
+          type: [number, "null"]
+          description: SOL value of the trade (native token amount on non-Solana chains).
+        amount:
+          type: [number, "null"]
+          description: Token quantity moved.
+        dex:
+          type: string
+          description: DEX the trade executed on.
+        blockTime:
+          type: [string, "null"]
+          format: date-time
+      required: [signature, side, token, dex]
+      example:
+        signature: 43C68awy5pN3ze...aY1Ve2X
+        side: sell
+        token: Benny
+        tokenMint: 9xY2...pump
+        amountSol: 0.0448
+        amount: 152340.12
+        dex: Pump.fun
+        blockTime: "2026-07-19T07:37:17+00:00"
+
+    StreamBatchLine:
+      type: object
+      description: One NDJSON line carrying a batch of trades.
+      properties:
+        trades:
+          type: array
+          items:
+            $ref: "#/components/schemas/Trade"
+        cursor:
+          type: string
+          description: Cursor to resume from if the stream is interrupted.
+      required: [trades]
+
+    StreamTerminalLine:
+      type: object
+      description: The final NDJSON line, marking the end of the stream.
+      properties:
+        complete:
+          type: boolean
+          description: true if the full history was captured; false if the wallet is still indexing.
+        tradeCount:
+          type: integer
+        wallet:
+          type: string
+        firstTrade:
+          type: [string, "null"]
+          format: date-time
+      required: [complete, tradeCount, wallet]
+
+    HistoryPage:
+      type: object
+      description: A single page from the `?limit=` pagination mode.
+      properties:
+        wallet:
+          type: string
+        complete:
+          type: boolean
+        tradeCount:
+          type: integer
+          description: The wallet's TOTAL trade count (not this page's size).
+        pageSize:
+          type: integer
+        totalPages:
+          type: integer
+        trades:
+          type: array
+          items:
+            $ref: "#/components/schemas/Trade"
+        cursor:
+          type: string
+          description: Present only when there are more pages; omitted at end-of-history.
+      required: [wallet, complete, tradeCount, pageSize, totalPages, trades]
+
+    EstimateRequest:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        chain:
+          type: string
+          default: sol
+      required: [addresses]
+      example:
+        addresses: [Bi4rd5FH5bYEN8scZ7wevxNZyNmKHdaBcvewdPFxYdLt]
+
+    EstimateResponse:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: "#/components/schemas/AddressEstimate"
+      required: [addresses]
+
+    AddressEstimate:
+      type: object
+      properties:
+        address:
+          type: string
+        estimateType:
+          type: string
+          enum: [exact, approximate]
+        estimatedTradeCount:
+          type: integer
+        estimatedSeconds:
+          type: integer
+        sampleTrades:
+          type: array
+          items:
+            $ref: "#/components/schemas/Trade"
+      required: [address, estimateType, estimatedTradeCount]
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            timestamp:
+              type: string
+              format: date-time
+            requestId:
+              type: string
+          required: [code, message]
+      required: [error]
+      example:
+        error:
+          code: VALIDATION_ERROR
+          message: Invalid Solana wallet address format
+          timestamp: "2026-07-24T05:46:10Z"
+          requestId: 7736b68d-...
