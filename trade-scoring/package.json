@@ -17,6 +17,7 @@
     "ml-random-forest": "^2.1.0"
   },
   "devDependencies": {
+    "@types/node": "^20",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   }
