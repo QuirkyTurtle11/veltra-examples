@@ -1,0 +1,14 @@
+[
+  { "wallet": "example-skilled-1", "label": 1, "features": { "winRate": 0.64, "profitShare": 0.72, "roi": 0.58, "activity": 0.78, "exitDiscipline": 0.82, "avgSize": 0.42 } },
+  { "wallet": "example-skilled-2", "label": 1, "features": { "winRate": 0.58, "profitShare": 0.66, "roi": 0.52, "activity": 0.7, "exitDiscipline": 0.88, "avgSize": 0.3 } },
+  { "wallet": "example-skilled-3", "label": 1, "features": { "winRate": 0.6, "profitShare": 0.78, "roi": 0.63, "activity": 0.85, "exitDiscipline": 0.76, "avgSize": 0.55 } },
+  { "wallet": "example-skilled-4", "label": 1, "features": { "winRate": 0.55, "profitShare": 0.64, "roi": 0.5, "activity": 0.62, "exitDiscipline": 0.9, "avgSize": 0.25 } },
+  { "wallet": "example-skilled-5", "label": 1, "features": { "winRate": 0.68, "profitShare": 0.74, "roi": 0.6, "activity": 0.8, "exitDiscipline": 0.85, "avgSize": 0.48 } },
+  { "wallet": "example-skilled-6", "label": 1, "features": { "winRate": 0.57, "profitShare": 0.69, "roi": 0.54, "activity": 0.66, "exitDiscipline": 0.8, "avgSize": 0.35 } },
+  { "wallet": "example-unskilled-1", "label": 0, "features": { "winRate": 0.32, "profitShare": 0.28, "roi": 0.19, "activity": 0.55, "exitDiscipline": 0.38, "avgSize": 0.18 } },
+  { "wallet": "example-unskilled-2", "label": 0, "features": { "winRate": 0.4, "profitShare": 0.35, "roi": 0.24, "activity": 0.48, "exitDiscipline": 0.3, "avgSize": 0.22 } },
+  { "wallet": "example-unskilled-3", "label": 0, "features": { "winRate": 0.28, "profitShare": 0.31, "roi": 0.21, "activity": 0.7, "exitDiscipline": 0.25, "avgSize": 0.15 } },
+  { "wallet": "example-unskilled-4", "label": 0, "features": { "winRate": 0.45, "profitShare": 0.4, "roi": 0.26, "activity": 0.35, "exitDiscipline": 0.45, "avgSize": 0.12 } },
+  { "wallet": "example-unskilled-5", "label": 0, "features": { "winRate": 0.35, "profitShare": 0.3, "roi": 0.2, "activity": 0.6, "exitDiscipline": 0.32, "avgSize": 0.28 } },
+  { "wallet": "example-unskilled-6", "label": 0, "features": { "winRate": 0.38, "profitShare": 0.33, "roi": 0.22, "activity": 0.5, "exitDiscipline": 0.28, "avgSize": 0.2 } }
+]

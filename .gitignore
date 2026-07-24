@@ -1,0 +1,8 @@
+# Dependencies
+node_modules/
+
+# Local secrets — never commit your API key
+.env
+
+# Logs
+*.log

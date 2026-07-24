@@ -1,0 +1,23 @@
+{
+  "name": "veltra-trade-scoring",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Score how skilled a wallet is by training a model on its Veltra trade history",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "test": "tsx --test src/features.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ml-random-forest": "^2.1.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}
