@@ -46,7 +46,7 @@ Slippage:        1.00% per fill
 
 Your copy result
 ----------------
-Realized PnL:    +18.44 SOL  (+22.1% on deployed capital)
+Realized PnL:    +18.44 SOL  (+18% on your 100 SOL bankroll)
 End bankroll:    108.90 SOL  (started 100)
 Deployed:        83.40 SOL across 120 buys, 96 sells
 Still held:      9.54 SOL at cost (open positions, value not priced by the API)

@@ -30,7 +30,8 @@ async function main() {
     process.exit(1)
   }
 
-  const [mode, wallet, labelArg] = process.argv.slice(2)
+  const [mode, walletArg, labelArg] = process.argv.slice(2)
+  const wallet = walletArg || process.env.WALLET
   if ((mode !== 'score' && mode !== 'label') || !wallet) {
     printUsage()
     process.exit(1)

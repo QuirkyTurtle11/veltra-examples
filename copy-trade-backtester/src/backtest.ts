@@ -37,8 +37,8 @@ export interface BacktestResult {
   endBankrollSol: number
   /** Realized cash PnL = endBankroll - startBankroll. Excludes still-held positions. */
   realizedPnlSol: number
-  /** Return on the capital actually deployed into buys. */
-  returnOnDeployedPct: number
+  /** Realized PnL as a percent of the starting bankroll — your account's return on capital. */
+  returnOnBankrollPct: number
   /** Total SOL spent opening copied positions. */
   deployedSol: number
   /** Cost basis of positions still open at the end (money still tied up, value unpriced). */
@@ -157,7 +157,7 @@ export function runBacktest(trades: Trade[], config: BacktestConfig): BacktestRe
     startBankrollSol: config.bankrollSol,
     endBankrollSol: bankroll,
     realizedPnlSol,
-    returnOnDeployedPct: deployed === 0 ? 0 : (realizedPnlSol / deployed) * 100,
+    returnOnBankrollPct: (realizedPnlSol / config.bankrollSol) * 100,
     deployedSol: deployed,
     openCostSol,
     copiedBuys,

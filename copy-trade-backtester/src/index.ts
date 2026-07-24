@@ -77,9 +77,9 @@ function printReport(
   const sign = r.realizedPnlSol >= 0 ? '+' : ''
   console.log('Your copy result')
   console.log('----------------')
-  console.log(`Realized PnL:    ${sign}${r.realizedPnlSol.toFixed(2)} SOL  (${sign}${r.returnOnDeployedPct.toFixed(1)}% on deployed capital)`)
+  console.log(`Realized PnL:    ${sign}${r.realizedPnlSol.toFixed(2)} SOL  (${sign}${r.returnOnBankrollPct.toFixed(0)}% on your ${config.bankrollSol} SOL bankroll)`)
   console.log(`End bankroll:    ${r.endBankrollSol.toFixed(2)} SOL  (started ${r.startBankrollSol})`)
-  console.log(`Deployed:        ${r.deployedSol.toFixed(2)} SOL across ${r.copiedBuys} buys, ${r.copiedSells} sells`)
+  console.log(`Bought total:    ${r.deployedSol.toFixed(2)} SOL across ${r.copiedBuys} buys, ${r.copiedSells} sells (bankroll recycled as positions close)`)
   console.log(`Still held:      ${r.openCostSol.toFixed(2)} SOL at cost (open positions, value not priced by the API)`)
   console.log(`Win rate:        ${(r.winRate * 100).toFixed(1)}%  (${r.winners} winners / ${r.losers} losers, ${r.tokensTraded} tokens)`)
   console.log(`Slippage cost:   ${r.slippageCostSol.toFixed(2)} SOL lost to fills`)
