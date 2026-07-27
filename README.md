@@ -35,6 +35,8 @@ That single stream of "who bought/sold what, for how much SOL, where, and when" 
 to build wallet analytics, PnL tracking, copy-trading intelligence, sniper detection, and
 trade-scoring models. Each example below shows one of those.
 
+https://github.com/user-attachments/assets/09dd7492-86b4-46ab-a33a-d4d1ca3497b5
+
 ## Examples
 
 | Example | What it does | Level |
