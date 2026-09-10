@@ -28,7 +28,7 @@ async function main() {
   const apiKey = process.env.VELTRA_API_KEY
   if (!apiKey) {
     console.error('Missing VELTRA_API_KEY. Copy .env.example to .env and paste your key.')
-    console.error('Get a key at https://veltrabot.com')
+    console.error('Get a key at https://veltradata.io')
     process.exit(1)
   }
 

@@ -78,7 +78,7 @@ Each sell consumes lots **first-in-first-out** and realizes `proceeds - cost_of_
   PnL is positive. Tokens the wallet only ever bought don't count for or against it.
 
 The `amount` and `tokenMint` fields this relies on are part of every trade the API returns;
-see the [API docs](https://veltrabot.com/docs). Grouping is keyed on `tokenMint` (symbols can
+see the [API docs](https://veltradata.io/docs). Grouping is keyed on `tokenMint` (symbols can
 collide) and falls back to the symbol when a mint is absent.
 
 ## License

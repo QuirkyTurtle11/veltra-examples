@@ -23,7 +23,7 @@ async function main() {
   const apiKey = process.env.VELTRA_API_KEY
   if (!apiKey) {
     console.error('Missing VELTRA_API_KEY. Copy .env.example to .env and paste your key.')
-    console.error('Get a key at https://veltrabot.com')
+    console.error('Get a key at https://veltradata.io')
     process.exit(1)
   }
 
@@ -123,7 +123,7 @@ main().catch((err) => {
   if (err instanceof VeltraError) {
     console.error(`\nVeltra API error (${err.status}): ${err.message}`)
     if (err.status === 401) console.error('Check that VELTRA_API_KEY is set correctly.')
-    if (err.status === 402) console.error('Your plan quota is exhausted. See https://veltrabot.com')
+    if (err.status === 402) console.error('Your plan quota is exhausted. See https://veltradata.io')
   } else {
     console.error('\nUnexpected error:', err instanceof Error ? err.message : err)
   }

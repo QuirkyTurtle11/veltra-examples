@@ -4,8 +4,8 @@ Every example in this repo is TypeScript, but the Veltra API is just HTTP + a be
 you can use it from any language. These recipes show the raw calls with `curl` — translate
 them into your language's HTTP client of choice.
 
-Base URL: `https://veltrabot.com`. Authentication: `Authorization: Bearer <YOUR_API_KEY>`
-(get a key at [veltrabot.com](https://veltrabot.com)). The `/v1/...` and `/api/v1/...` paths
+Base URL: `https://veltradata.io`. Authentication: `Authorization: Bearer <YOUR_API_KEY>`
+(get a key at [veltradata.io](https://veltradata.io)). The `/v1/...` and `/api/v1/...` paths
 are equivalent; the short form is used below.
 
 Set your key once for the snippets:
@@ -22,7 +22,7 @@ they're fetched, then a final line reports completion. `-N` disables curl's buff
 appear as they stream.
 
 ```bash
-curl -N "https://veltrabot.com/v1/wallets/$WALLET/history" \
+curl -N "https://veltradata.io/v1/wallets/$WALLET/history" \
   -H "Authorization: Bearer $VELTRA_API_KEY"
 ```
 
@@ -54,7 +54,7 @@ with `?cursor=` (recipe 3) to get the rest.
 Pass `limit` to get ordinary single-JSON pages (newest first) rather than NDJSON:
 
 ```bash
-curl "https://veltrabot.com/v1/wallets/$WALLET/history?limit=100" \
+curl "https://veltradata.io/v1/wallets/$WALLET/history?limit=100" \
   -H "Authorization: Bearer $VELTRA_API_KEY"
 ```
 
@@ -78,11 +78,11 @@ parse or modify it.
 
 ```bash
 # First page
-curl "https://veltrabot.com/v1/wallets/$WALLET/history?limit=100" \
+curl "https://veltradata.io/v1/wallets/$WALLET/history?limit=100" \
   -H "Authorization: Bearer $VELTRA_API_KEY"
 
 # Next page (paste the cursor you received)
-curl "https://veltrabot.com/v1/wallets/$WALLET/history?limit=100&cursor=8kQ2mZ3rV9...tLf0X" \
+curl "https://veltradata.io/v1/wallets/$WALLET/history?limit=100&cursor=8kQ2mZ3rV9...tLf0X" \
   -H "Authorization: Bearer $VELTRA_API_KEY"
 ```
 
@@ -94,7 +94,7 @@ Add `?chain=<slug>`; it defaults to `sol`. The address is validated against that
 format (base58 for Solana, `0x...` for EVM chains, `T...` for Tron).
 
 ```bash
-curl -N "https://veltrabot.com/v1/wallets/0xYourWallet/history?chain=ethereum" \
+curl -N "https://veltradata.io/v1/wallets/0xYourWallet/history?chain=ethereum" \
   -H "Authorization: Bearer $VELTRA_API_KEY"
 ```
 
@@ -107,7 +107,7 @@ Cheaply probe how big a wallet is — and get a few sample trades — before com
 fetch. Takes an array of addresses (IP-rate-limited, no API key required):
 
 ```bash
-curl -X POST "https://veltrabot.com/v1/billing/estimate" \
+curl -X POST "https://veltradata.io/v1/billing/estimate" \
   -H "Content-Type: application/json" \
   -d "{\"addresses\":[\"$WALLET\"]}"
 ```
@@ -128,14 +128,14 @@ Errors come back as JSON with a nested `error` object:
 | --- | --- | --- |
 | `400` | Bad request (e.g. malformed address) | Fix the input; read `error.message` |
 | `401` | Missing or invalid API key | Check the `Authorization` header |
-| `402` | Plan quota exhausted | Upgrade or enable overage at veltrabot.com |
+| `402` | Plan quota exhausted | Upgrade or enable overage at veltradata.io |
 | `429` | Rate limited | Back off and retry |
 
 Read the numeric status from curl and branch on it:
 
 ```bash
 code=$(curl -s -o /dev/null -w "%{http_code}" \
-  "https://veltrabot.com/v1/wallets/$WALLET/history?limit=1" \
+  "https://veltradata.io/v1/wallets/$WALLET/history?limit=1" \
   -H "Authorization: Bearer $VELTRA_API_KEY")
 echo "HTTP $code"
 ```
@@ -145,14 +145,14 @@ echo "HTTP $code"
 Count trades on the first page:
 
 ```bash
-curl -s "https://veltrabot.com/v1/wallets/$WALLET/history?limit=1000" \
+curl -s "https://veltradata.io/v1/wallets/$WALLET/history?limit=1000" \
   -H "Authorization: Bearer $VELTRA_API_KEY" | jq '.trades | length'
 ```
 
 Total SOL spent on buys in a page:
 
 ```bash
-curl -s "https://veltrabot.com/v1/wallets/$WALLET/history?limit=1000" \
+curl -s "https://veltradata.io/v1/wallets/$WALLET/history?limit=1000" \
   -H "Authorization: Bearer $VELTRA_API_KEY" \
   | jq '[.trades[] | select(.side=="buy") | .amountSol // 0] | add'
 ```
@@ -160,7 +160,7 @@ curl -s "https://veltrabot.com/v1/wallets/$WALLET/history?limit=1000" \
 Stream and pull just the fields you care about, live:
 
 ```bash
-curl -sN "https://veltrabot.com/v1/wallets/$WALLET/history" \
+curl -sN "https://veltradata.io/v1/wallets/$WALLET/history" \
   -H "Authorization: Bearer $VELTRA_API_KEY" \
   | jq -c 'select(.trades) | .trades[] | {side, token, amountSol, dex}'
 ```

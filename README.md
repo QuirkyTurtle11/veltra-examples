@@ -1,7 +1,7 @@
 # Veltra Examples
 
 Complete, runnable examples showing how to build real applications on top of the
-[Veltra](https://veltrabot.com) wallet trade-history API.
+[Veltra](https://veltradata.io) wallet trade-history API.
 
 Every example answers one question: **"How do I accomplish this common on-chain task with Veltra?"**
 Each one is a self-contained folder you can copy straight into your own project.
@@ -12,7 +12,7 @@ Veltra gives you a wallet's **complete** buy/sell trade history — not capped a
 thousand rows — from one endpoint:
 
 ```
-GET https://veltrabot.com/api/v1/wallets/:address/history
+GET https://veltradata.io/api/v1/wallets/:address/history
 Authorization: Bearer <YOUR_API_KEY>
 ```
 
@@ -64,7 +64,7 @@ npm install
 npm start -- <wallet-address>
 ```
 
-Get an API key by signing up at [veltrabot.com](https://veltrabot.com) — the free trial is
+Get an API key by signing up at [veltradata.io](https://veltradata.io) — the free trial is
 enough to run every example here.
 
 **Prerequisites:** Node.js 18+ to run an example; Node.js 20+ to run the test suites (they use

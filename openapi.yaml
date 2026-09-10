@@ -5,15 +5,15 @@ info:
   description: >
     Give it a wallet address, get that wallet's complete buy/sell trade history — not capped
     at a few thousand rows — across Solana, every major EVM chain, and Tron, from a single
-    endpoint. Authenticated with a bearer API key. Get a key at https://veltrabot.com.
+    endpoint. Authenticated with a bearer API key. Get a key at https://veltradata.io.
   license:
     name: Veltra Terms of Service
-    url: https://veltrabot.com/terms
+    url: https://veltradata.io/terms
   contact:
-    url: https://veltrabot.com
+    url: https://veltradata.io
 
 servers:
-  - url: https://veltrabot.com
+  - url: https://veltradata.io
     description: Production
 
 security:

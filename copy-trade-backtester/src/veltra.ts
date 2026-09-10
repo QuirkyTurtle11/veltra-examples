@@ -65,7 +65,7 @@ export interface HistoryPage {
 
 export interface VeltraOptions {
   apiKey: string
-  /** Defaults to https://veltrabot.com */
+  /** Defaults to https://veltradata.io */
   baseUrl?: string
 }
 
@@ -92,10 +92,10 @@ export class Veltra {
 
   constructor(options: VeltraOptions) {
     if (!options.apiKey) {
-      throw new Error('Veltra: apiKey is required. Get one at https://veltrabot.com')
+      throw new Error('Veltra: apiKey is required. Get one at https://veltradata.io')
     }
     this.apiKey = options.apiKey
-    this.baseUrl = (options.baseUrl ?? 'https://veltrabot.com').replace(/\/$/, '')
+    this.baseUrl = (options.baseUrl ?? 'https://veltradata.io').replace(/\/$/, '')
   }
 
   /**
